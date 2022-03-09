@@ -8,8 +8,10 @@ def nach_debit_status(request):
             transaction = Transaction.objects.get(digio_transaction_id=data["payload"]["nach_debit"]["transaction_id"])
             if data["event"] == "nach.debit.success":
                 transaction.debit_status = 2
+                # need to add 2 more status to txn - 1 after consolidated.settlement.completed, 1 after successful payout
                 # Initiate payout from Hypto
                 initiate_payout(request)
+
                 
             if data["event"] == "nach.debit.failed":
                 transaction.debit_status = 3 
